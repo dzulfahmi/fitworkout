@@ -157,6 +157,25 @@ CREATE TABLE $tableSessionLogs (
     return result.map((json) => WorkoutPlan.fromMap(json)).toList();
   }
 
+  Future<int> updateWorkoutPlan(WorkoutPlan plan) async {
+    final db = await instance.database;
+    return db.update(
+      tableWorkoutPlans,
+      plan.toMap(),
+      where: '${WorkoutPlanFields.id} = ?',
+      whereArgs: [plan.id],
+    );
+  }
+
+  Future<int> deleteWorkoutPlan(int id) async {
+    final db = await instance.database;
+    return await db.delete(
+      tableWorkoutPlans,
+      where: '${WorkoutPlanFields.id} = ?',
+      whereArgs: [id],
+    );
+  }
+
   // (Anda bisa tambahkan readWorkoutPlan, update, delete sesuai kebutuhan)
 
   // --- ASSIGN WORKOUT TO PLAN (Fitur 3) ---

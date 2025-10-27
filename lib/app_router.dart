@@ -1,4 +1,5 @@
 import 'package:fit_workout/screens/home_screen.dart';
+import 'package:fit_workout/screens/plan_list_screen.dart';
 import 'package:fit_workout/screens/workout_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +13,7 @@ class AppRoutes {
   static const String homeRouteName = 'home';
   static const String workoutListRouteName = 'workouts';
   static const String planListRouteName = 'plans';
+  static const String planDetailRouteName = 'plan-detail';
   static const String historyRouteName = 'history';
   static const String startSessionRouteName = 'start-session';
 }
@@ -29,8 +31,33 @@ final appRouter = GoRouter(
       name: AppRoutes.workoutListRouteName,
       builder: (context, state) => const WorkoutListScreen(),
     ),
-    // --- TODO: Tambahkan Rute Lain Di Sini ---
-    // Contoh untuk halaman yang belum dibuat:
+    GoRoute(
+      path: '/plans',
+      name: AppRoutes.planListRouteName,
+      builder: (context, state) => const PlanListScreen(), // Menggunakan halaman baru
+    ),
+    // Rute untuk detail plan, menerima ID sebagai parameter
+    GoRoute(
+      path: '/plan/:planId', // :planId adalah path parameter
+      name: AppRoutes.planDetailRouteName,
+      builder: (context, state) {
+        // Ambil planId dari path parameter
+        final planId = int.tryParse(state.pathParameters['planId'] ?? '');
+        if (planId != null) {
+          // TODO: Ganti dengan halaman PlanDetailScreen(planId: planId)
+          return Scaffold(
+            appBar: AppBar(title: Text('Detail Plan $planId')),
+            body: Center(child: Text('TODO: Buat halaman detail untuk plan ID $planId')),
+          );
+        }
+        // Jika ID tidak valid, kembali ke home
+        // Sebaiknya tampilkan halaman error
+        return Scaffold(
+          appBar: AppBar(title: const Text('Error')),
+          body: const Center(child: Text('ID Plan tidak valid')),
+        );
+      },
+    ),
     /*
     GoRoute(
       path: '/plans',

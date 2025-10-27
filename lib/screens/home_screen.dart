@@ -36,13 +36,8 @@ class HomeScreen extends StatelessWidget {
             title: 'Kelola Workout Plan',
             subtitle: 'Buat dan edit rencana latihan Anda',
             onTap: () {
-              // TODO: Navigasi ke halaman CRUD Workout Plan (Fitur 2 & 3)
-              // Ganti dengan: context.pushNamed(AppRoutes.planListRouteName);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text(
-                        'Halaman "Workout Plan" belum dibuat. Tambahkan di app_router.dart')),
-              );
+              // Navigasi ke halaman CRUD Workout Plan (Fitur 2 & 3)
+              context.pushNamed(AppRoutes.planListRouteName);
             },
           ),
           _buildMenuCard(
@@ -51,19 +46,6 @@ class HomeScreen extends StatelessWidget {
             title: 'Database Workout',
             subtitle: 'Kelola daftar latihan (push up, squat, dll)',
             onTap: () {
-              // Navigasi ke halaman CRUD Workout (Fitur 1)
-              // Versi lama:
-              /*
-              Navigator.push(
-                context,
-                MaterialPageRoute(
-                  builder: (context) => const WorkoutListScreen(),
-                ),
-              );
-              */
-
-              // Versi baru dengan go_router
-              // Menggunakan nama rute lebih aman dari typo daripada path string
               context.pushNamed(AppRoutes.workoutListRouteName);
             },
           ),
