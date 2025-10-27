@@ -17,14 +17,14 @@ class WorkoutFields {
   ];
 }
 
-class Workout {
+class WorkoutModel {
   final int? id;
   final String name;
   final String? description;
   final String? youtubeLink;
   final String? notes;
 
-  const Workout({
+  const WorkoutModel({
     this.id,
     required this.name,
     this.description,
@@ -32,14 +32,14 @@ class Workout {
     this.notes,
   });
 
-  Workout copy({
+  WorkoutModel copy({
     int? id,
     String? name,
     String? description,
     String? youtubeLink,
     String? notes,
   }) =>
-      Workout(
+      WorkoutModel(
         id: id ?? this.id,
         name: name ?? this.name,
         description: description ?? this.description,
@@ -55,7 +55,7 @@ class Workout {
         WorkoutFields.notes: notes,
       };
 
-  static Workout fromMap(Map<String, dynamic> map) => Workout(
+  static WorkoutModel fromMap(Map<String, dynamic> map) => WorkoutModel(
         id: map[WorkoutFields.id] as int?,
         name: map[WorkoutFields.name] as String,
         description: map[WorkoutFields.description] as String?,

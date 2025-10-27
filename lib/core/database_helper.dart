@@ -96,13 +96,13 @@ CREATE TABLE $tableSessionLogs (
 
   // --- CRUD WORKOUT (Fitur 1) ---
 
-  Future<Workout> createWorkout(Workout workout) async {
+  Future<WorkoutModel> createWorkout(WorkoutModel workout) async {
     final db = await instance.database;
     final id = await db.insert(tableWorkouts, workout.toMap());
     return workout.copy(id: id);
   }
 
-  Future<Workout> readWorkout(int id) async {
+  Future<WorkoutModel> readWorkout(int id) async {
     final db = await instance.database;
     final maps = await db.query(
       tableWorkouts,
@@ -112,19 +112,19 @@ CREATE TABLE $tableSessionLogs (
     );
 
     if (maps.isNotEmpty) {
-      return Workout.fromMap(maps.first);
+      return WorkoutModel.fromMap(maps.first);
     } else {
       throw Exception('ID $id not found');
     }
   }
 
-  Future<List<Workout>> readAllWorkouts() async {
+  Future<List<WorkoutModel>> readAllWorkouts() async {
     final db = await instance.database;
     final result = await db.query(tableWorkouts);
-    return result.map((json) => Workout.fromMap(json)).toList();
+    return result.map((json) => WorkoutModel.fromMap(json)).toList();
   }
 
-  Future<int> updateWorkout(Workout workout) async {
+  Future<int> updateWorkout(WorkoutModel workout) async {
     final db = await instance.database;
     return db.update(
       tableWorkouts,
