@@ -1,5 +1,6 @@
 import 'package:fit_workout/screens/home_screen.dart';
 import 'package:fit_workout/screens/plan_list_screen.dart';
+import 'package:fit_workout/screens/start_session_screen.dart';
 import 'package:fit_workout/screens/workout_list_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:go_router/go_router.dart';
@@ -16,6 +17,7 @@ class AppRoutes {
   static const String planDetailRouteName = 'plan-detail';
   static const String historyRouteName = 'history';
   static const String startSessionRouteName = 'start-session';
+  static const String sessionLogRouteName = 'session-log';
 }
 
 final appRouter = GoRouter(
@@ -52,6 +54,32 @@ final appRouter = GoRouter(
         }
         // Jika ID tidak valid, kembali ke home
         // Sebaiknya tampilkan halaman error
+        return Scaffold(
+          appBar: AppBar(title: const Text('Error')),
+          body: const Center(child: Text('ID Plan tidak valid')),
+        );
+      },
+    ),
+    GoRoute(
+      path: '/start-session',
+      name: AppRoutes.startSessionRouteName,
+      builder: (context, state) =>
+          const StartSessionScreen(), // Menggunakan halaman baru
+    ),
+    // Rute baru untuk halaman pencatatan sesi
+    GoRoute(
+      path: '/session/:planId',
+      name: AppRoutes.sessionLogRouteName,
+      builder: (context, state) {
+        final planId = int.tryParse(state.pathParameters['planId'] ?? '');
+        if (planId != null) {
+          // TODO: Ganti dengan halaman SessionLogScreen(planId: planId)
+          return Scaffold(
+            appBar: AppBar(title: Text('Sesi Plan $planId')),
+            body: Center(
+                child: Text('TODO: Buat halaman pencatatan sesi untuk plan ID $planId')),
+          );
+        }
         return Scaffold(
           appBar: AppBar(title: const Text('Error')),
           body: const Center(child: Text('ID Plan tidak valid')),

@@ -21,13 +21,8 @@ class HomeScreen extends StatelessWidget {
             title: 'Mulai Latihan',
             subtitle: 'Pilih plan dan catat sesi Anda',
             onTap: () {
-              // TODO: Navigasi ke halaman pemilihan plan untuk memulai sesi
-              // Ganti dengan: context.pushNamed(AppRoutes.startSessionRouteName);
-              ScaffoldMessenger.of(context).showSnackBar(
-                const SnackBar(
-                    content: Text(
-                        'Halaman "Mulai Latihan" belum dibuat. Tambahkan di app_router.dart')),
-              );
+              // Navigasi ke halaman pemilihan plan untuk memulai sesi
+              context.pushNamed(AppRoutes.startSessionRouteName);
             },
           ),
           _buildMenuCard(
