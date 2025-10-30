@@ -1,3 +1,4 @@
+import 'package:fit_workout/screens/history_screen.dart';
 import 'package:fit_workout/screens/home_screen.dart';
 import 'package:fit_workout/screens/plan_list_screen.dart';
 import 'package:fit_workout/screens/start_session_screen.dart';
@@ -32,6 +33,11 @@ final appRouter = GoRouter(
       path: '/workouts',
       name: AppRoutes.workoutListRouteName,
       builder: (context, state) => const WorkoutListScreen(),
+    ),
+    GoRoute(
+      path: '/history',
+      name: AppRoutes.historyRouteName,
+      builder: (context, state) => const HistoryScreen(), // Ganti dengan widget Anda
     ),
     GoRoute(
       path: '/plans',

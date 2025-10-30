@@ -48,6 +48,16 @@ class HomeScreen extends StatelessWidget {
             context,
             icon: Icons.history,
             title: 'Riwayat Latihan',
+            subtitle: 'Lihat sesi latihan yang telah selesai',
+            onTap: () {
+              // Navigasi ke halaman riwayat
+              context.pushNamed(AppRoutes.historyRouteName);
+            },
+          ),
+          _buildMenuCard(
+            context,
+            icon: Icons.history,
+            title: 'Riwayat Latihan',
             subtitle: 'Lihat progres dan sesi sebelumnya',
             onTap: () {
               // TODO: Navigasi ke halaman riwayat (Fitur 4)

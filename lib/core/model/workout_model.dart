@@ -319,3 +319,59 @@ class SessionLog {
         notes: map[SessionLogFields.notes] as String?,
       );
 }
+
+// Model ini BUKAN tabel, tapi view-model untuk menampung
+// data hasil JOIN query antara Session dan Plan
+class SessionHistoryViewModel {
+  final int sessionId;
+  final int planId;
+  final String planName;
+  final DateTime sessionDate;
+
+  SessionHistoryViewModel({
+    required this.sessionId,
+    required this.planId,
+    required this.planName,
+    required this.sessionDate,
+  });
+
+  factory SessionHistoryViewModel.fromMap(Map<String, dynamic> json) => SessionHistoryViewModel(
+        sessionId: json['sessionId'] as int,
+        planId: json['planId'] as int,
+        planName: json['planName'] as String,
+        sessionDate: DateTime.parse(json['sessionDate'] as String),
+        // sessionDate: DateTime.parse(json[WorkoutSessionFields.date] as String),
+      );
+}
+
+class PlanWorkoutViewModel {
+  final int planWorkoutId; // ID dari tabel junction (PlanWorkout)
+  final int workoutId;      // ID dari tabel Workout
+  final String workoutName;
+  final String? workoutDescription;
+  final int sets;
+  final int repMin;
+  final int repMax;
+
+  PlanWorkoutViewModel({
+    required this.planWorkoutId,
+    required this.workoutId,
+    required this.workoutName,
+    this.workoutDescription,
+    required this.sets,
+    required this.repMin,
+    required this.repMax,
+  });
+
+  // Factory untuk membuat dari hasil query SQL JOIN
+  factory PlanWorkoutViewModel.fromMap(Map<String, dynamic> json) => PlanWorkoutViewModel(
+        // Nama alias HARUS SAMA PERSIS dengan di query SQL
+        planWorkoutId: json['planWorkoutId'] as int,
+        workoutId: json['workoutId'] as int,
+        workoutName: json[WorkoutFields.name] as String,
+        workoutDescription: json[WorkoutFields.description] as String?,
+        sets: json[PlanWorkoutFields.targetSets] as int,
+        repMin: json[PlanWorkoutFields.targetRepMin] as int,
+        repMax: json[PlanWorkoutFields.targetRepMax] as int,
+      );
+}

@@ -157,6 +157,23 @@ CREATE TABLE $tableSessionLogs (
     return result.map((json) => WorkoutPlan.fromMap(json)).toList();
   }
 
+  // FUNGSI BARU: Membaca satu WorkoutPlan
+  Future<WorkoutPlan> readWorkoutPlan(int id) async {
+    final db = await instance.database;
+    final maps = await db.query(
+      tableWorkoutPlans,
+      columns: WorkoutPlanFields.values,
+      where: '${WorkoutPlanFields.id} = ?',
+      whereArgs: [id],
+    );
+
+    if (maps.isNotEmpty) {
+      return WorkoutPlan.fromMap(maps.first);
+    } else {
+      throw Exception('Plan ID $id not found');
+    }
+  }
+
   Future<int> updateWorkoutPlan(WorkoutPlan plan) async {
     final db = await instance.database;
     return db.update(
@@ -187,10 +204,10 @@ CREATE TABLE $tableSessionLogs (
   }
 
   // Mendapatkan semua detail workout dalam sebuah plan
-  Future<List<Map<String, dynamic>>> getWorkoutsForPlan(int planId) async {
+  Future<List<PlanWorkoutViewModel>> getWorkoutsForPlan(int planId) async {
     final db = await instance.database;
     // Query ini menggabungkan tabel plan_workouts dengan tabel workouts
-    // untuk mendapatkan nama, deskripsi, set, reps, dll.
+    // untuk mendapatkan nama workout dan detail set/reps
     final result = await db.rawQuery('''
       SELECT
         w.${WorkoutFields.id} as workoutId,
@@ -205,10 +222,30 @@ CREATE TABLE $tableSessionLogs (
       WHERE pw.${PlanWorkoutFields.planId} = ?
     ''', [planId]);
 
-    return result;
+    // Mengubah hasil query map menjadi List dari model view kita
+    return result.map((json) => PlanWorkoutViewModel.fromMap(json)).toList();
   }
   
-  // (Anda bisa tambahkan unassignWorkoutFromPlan, updatePlanWorkout, dll.)
+  // FUNGSI BARU: Menghapus workout dari plan
+  Future<int> removeWorkoutFromPlan(int planWorkoutId) async {
+    final db = await instance.database;
+    return db.delete(
+      tablePlanWorkouts,
+      where: '${PlanWorkoutFields.id} = ?',
+      whereArgs: [planWorkoutId],
+    );
+  }
+
+  // FUNGSI BARU: Memperbarui detail workout (set/reps) di plan
+  Future<int> updatePlanWorkout(PlanWorkout planWorkout) async {
+    final db = await instance.database;
+    return db.update(
+      tablePlanWorkouts,
+      planWorkout.toMap(),
+      where: '${PlanWorkoutFields.id} = ?',
+      whereArgs: [planWorkout.id],
+    );
+  }
 
 
   // --- LOGGING WORKOUT SESSION (Fitur 4) ---
@@ -259,6 +296,28 @@ CREATE TABLE $tableSessionLogs (
       ORDER BY w.${WorkoutFields.name}, l.${SessionLogFields.setNumber}
     ''', [sessionId]);
     return result;
+  }
+
+  Future<List<SessionHistoryViewModel>> readAllSessionsHistory() async {
+    final db = await instance.database;
+
+    // Kita menggunakan rawQuery untuk melakukan JOIN
+    // Kita menggabungkan tabel session (t1) dengan tabel plan (t2)
+    // berdasarkan planId
+    final String sql = '''
+      SELECT 
+        t1.${WorkoutSessionFields.id} as sessionId,
+        t1.${WorkoutSessionFields.planId} as planId,
+        t1.${WorkoutSessionFields.date} as sessionDate,
+        t2.${WorkoutPlanFields.name} as planName
+      FROM $tableWorkoutSessions t1
+      JOIN $tableWorkoutPlans t2 ON t1.${WorkoutSessionFields.planId} = t2.${WorkoutPlanFields.id}
+      ORDER BY t1.${WorkoutSessionFields.date} DESC
+    ''';
+    
+    final result = await db.rawQuery(sql);
+
+    return result.map((json) => SessionHistoryViewModel.fromMap(json)).toList();
   }
 
 
